@@ -22,7 +22,7 @@ import com.example.stylestock.ui.theme.WhiteSmoke
 
 
 @Composable
-fun Header(navController: NavController){
+fun Header(){
     Row(
         modifier = Modifier
             .fillMaxWidth(1f)
@@ -38,12 +38,12 @@ fun Header(navController: NavController){
                 .padding(start = 13.dp)
                 .width(150.dp)
         )
-        IconButton(onClick = { navController.navigate("trend")},){
+        IconButton(onClick = {},){
             Image(painter = painterResource(id = R.drawable.icon_search), contentDescription = "search",
                 modifier = Modifier
                     .padding(top=10.dp, end = 20.dp)
                     .size(30.dp)
-)
+    )
         }
     }
 }

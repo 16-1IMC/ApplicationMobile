@@ -7,12 +7,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import com.example.stylestock.ui.component.Header
+import com.example.stylestock.ui.component.NavBar
 import com.example.stylestock.ui.component.TitleComponent
 
 @Composable
 fun NewBrandScreen(navController: NavController){
     Column {
-        Header(navController)
+        Header()
         Column(modifier = Modifier
             .verticalScroll(rememberScrollState())) {
             TitleComponent(text = "New Brand")

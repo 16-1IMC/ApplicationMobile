@@ -15,7 +15,9 @@ import com.example.stylestock.ui.component.TitleComponent
 @Composable
 fun MyFollowScreen(navController: NavController) {
     Column {
-        Header(navController)
+        Header()
+
+
         Column(modifier = Modifier
             .verticalScroll(rememberScrollState())) {
             TitleComponent(text = "My Follow")
