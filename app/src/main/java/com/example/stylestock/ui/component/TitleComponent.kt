@@ -22,28 +22,24 @@ import com.example.stylestock.ui.theme.NeonBlue
 
 @Composable
 fun TitleComponent(text: String){
-    Box(modifier = Modifier
-        .padding(start = 33.dp),
-
-    ){
-        Text(
-            text = text,
+    Text(
+        text = text,
         color = Jet,
         fontSize = 30.sp,
-            fontFamily = Jura,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier
-                .height(46.dp)
-                .drawBehind {
-                    drawLine(
-                        color = NeonBlue,
-                        start = Offset(0f, size.height),
-                        end = Offset(size.width, size.height),
-                        strokeWidth = 15f,
-                        cap = StrokeCap.Square
-                    )
-                }
-        )
-    }
+        fontFamily = Jura,
+        fontWeight = FontWeight.Bold,
+        modifier = Modifier
+            .padding(start = 33.dp)
+            .height(46.dp)
+            .drawBehind {
+                drawLine(
+                    color = NeonBlue,
+                    start = Offset(0f, size.height),
+                    end = Offset(size.width, size.height),
+                    strokeWidth = 15f,
+                    cap = StrokeCap.Square
+                )
+            }
+    )
 
 }

@@ -18,11 +18,14 @@ import com.example.stylestock.R
 
 @Composable
 fun NavigationGraph(navController: NavHostController) {
-        NavHost(navController, startDestination = BottomNavItem.Follow.screen_route) {
+        NavHost(navController, startDestination = "login") {
             composable(BottomNavItem.Follow.screen_route) { MyFollowScreen(navController) }
             composable(BottomNavItem.Trend.screen_route) { TrendScreen(navController) }
             composable(BottomNavItem.Notification.screen_route) { NotificationScreen(navController) }
             composable(BottomNavItem.Profil.screen_route) { ProfilScreen(navController) }
             composable(BottomNavItem.NewBrand.screen_route) { NewBrandScreen(navController) }
+            composable("search") { SearchScreen(navController) }
+            composable("login") { LoginScreen(navController) }
+            composable("register") { RegisterScreen(navController) }
         }
 }

@@ -12,7 +12,11 @@ import com.example.stylestock.R
 val Jura = FontFamily(
     Font(R.font.jura_regular, FontWeight.Normal),
     Font(R.font.jura_bold, FontWeight.Bold),
+)
 
+val K2D = FontFamily(
+    Font(R.font.k2d_regular, FontWeight.Normal),
+    Font(R.font.k2d_bold, FontWeight.Bold),
 )
 
 // Set of Material typography styles to start with
