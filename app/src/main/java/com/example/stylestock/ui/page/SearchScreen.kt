@@ -1,10 +1,14 @@
 package com.example.stylestock.ui.page
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.stylestock.ui.component.Header
 import com.example.stylestock.ui.component.TitleComponent
@@ -14,8 +18,10 @@ fun SearchScreen(navController: NavController) {
     Column {
         Header()
         Column(modifier = Modifier
+            .padding(start = 33.dp)
             .verticalScroll(rememberScrollState())) {
-            TitleComponent(text = "Profil")
         }
+        Spacer(modifier = Modifier
+            .height(70.dp))
     }
 }

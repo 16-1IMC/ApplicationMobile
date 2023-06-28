@@ -71,7 +71,7 @@ fun RegisterScreen(navController: NavController) {
                             color = NeonBlue,
                             start = Offset(0f, size.height),
                             end = Offset(size.width, size.height),
-                            strokeWidth = 12f,
+                            strokeWidth = 6f,
                             cap = StrokeCap.Round
                         )
                     }

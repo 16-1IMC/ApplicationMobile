@@ -6,7 +6,7 @@ data class Post(
     val content: String,
     val brand: Brand,
     val image: List<Image>,
-    val tags: List<Tag>,
-    val creationDate: String,
+    val tags: List<Tag> = emptyList(),
+    val creationDate: String = "",
 
 )

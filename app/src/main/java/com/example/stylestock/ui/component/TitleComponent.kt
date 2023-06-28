@@ -36,8 +36,8 @@ fun TitleComponent(text: String){
                     color = NeonBlue,
                     start = Offset(0f, size.height),
                     end = Offset(size.width, size.height),
-                    strokeWidth = 15f,
-                    cap = StrokeCap.Square
+                    strokeWidth = 6f,
+                    cap = StrokeCap.Round
                 )
             }
     )

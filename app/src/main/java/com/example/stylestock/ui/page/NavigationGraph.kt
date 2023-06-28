@@ -18,7 +18,7 @@ import com.example.stylestock.R
 
 @Composable
 fun NavigationGraph(navController: NavHostController) {
-        NavHost(navController, startDestination = "login") {
+        NavHost(navController, startDestination = "follow") {
             composable(BottomNavItem.Follow.screen_route) { MyFollowScreen(navController) }
             composable(BottomNavItem.Trend.screen_route) { TrendScreen(navController) }
             composable(BottomNavItem.Notification.screen_route) { NotificationScreen(navController) }
