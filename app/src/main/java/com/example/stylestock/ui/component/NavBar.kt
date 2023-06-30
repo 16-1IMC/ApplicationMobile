@@ -36,36 +36,46 @@ fun NavBar(navController: NavController, iconToFilled: String) {
 
 
     ) {
-        IconButton(onClick = { navController.navigate("trend")},){
-            Image(painter = painterResource(id = if (iconToFilled == "trend") BottomNavItem.Trend.icon_fill else BottomNavItem.Trend.icon_empty ), contentDescription = "trend",
+        IconButton(onClick = { navController.navigate("trend") }) {
+            Image(
+                painter = painterResource(id = if (iconToFilled == "trend") BottomNavItem.Trend.icon_fill else BottomNavItem.Trend.icon_empty),
+                contentDescription = "trend",
                 modifier = Modifier
                     .padding(top = 10.dp, end = 20.dp)
                     .size(33.dp)
             )
         }
-        IconButton(onClick = { navController.navigate("new")},){
-            Image(painter = painterResource(id = if (iconToFilled == "newbrand") BottomNavItem.NewBrand.icon_fill else BottomNavItem.NewBrand.icon_empty ), contentDescription = "newbrand",
+        IconButton(onClick = { navController.navigate("new") }) {
+            Image(
+                painter = painterResource(id = if (iconToFilled == "newbrand") BottomNavItem.NewBrand.icon_fill else BottomNavItem.NewBrand.icon_empty),
+                contentDescription = "newbrand",
                 modifier = Modifier
                     .padding(top = 10.dp, end = 20.dp)
                     .size(33.dp)
             )
         }
-        IconButton(onClick = { navController.navigate("follow")},){
-            Image(painter = painterResource(id = if (iconToFilled == "myfollow") BottomNavItem.Follow.icon_fill else BottomNavItem.Follow.icon_empty ), contentDescription = "myfollow",
+        IconButton(onClick = { navController.navigate("follow") }) {
+            Image(
+                painter = painterResource(id = if (iconToFilled == "myfollow") BottomNavItem.Follow.icon_fill else BottomNavItem.Follow.icon_empty),
+                contentDescription = "myfollow",
                 modifier = Modifier
                     .padding(top = 10.dp, end = 20.dp)
                     .size(33.dp)
             )
         }
-        IconButton(onClick = { navController.navigate("notification")},){
-            Image(painter = painterResource(id = if (iconToFilled == "notification") BottomNavItem.Notification.icon_fill else BottomNavItem.Notification.icon_empty ), contentDescription = "notification",
+        IconButton(onClick = { navController.navigate("notification") }) {
+            Image(
+                painter = painterResource(id = if (iconToFilled == "notification") BottomNavItem.Notification.icon_fill else BottomNavItem.Notification.icon_empty),
+                contentDescription = "notification",
                 modifier = Modifier
                     .padding(top = 10.dp, end = 20.dp)
                     .size(33.dp)
             )
         }
-        IconButton(onClick = { navController.navigate("profil")},){
-            Image(painter = painterResource(id = if (iconToFilled == "profil") BottomNavItem.Profil.icon_fill else BottomNavItem.Profil.icon_empty ), contentDescription = "profil",
+        IconButton(onClick = { navController.navigate("profil") }) {
+            Image(
+                painter = painterResource(id = if (iconToFilled == "profil") BottomNavItem.Profil.icon_fill else BottomNavItem.Profil.icon_empty),
+                contentDescription = "profil",
                 modifier = Modifier
                     .padding(top = 10.dp, end = 20.dp)
                     .size(33.dp)

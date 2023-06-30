@@ -20,8 +20,8 @@ import com.example.stylestock.ui.component.TitleComponent
 @Composable
 fun TrendScreen(navController: NavController) {
     Column {
-        Header()
-            TitleComponent(text = "Trend")
+        Header(navController)
+            TitleComponent(text = "Trend",true)
         Column(modifier = Modifier
             .padding(start = 33.dp)
             .verticalScroll(rememberScrollState())) {

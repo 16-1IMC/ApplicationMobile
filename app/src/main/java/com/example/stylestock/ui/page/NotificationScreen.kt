@@ -19,8 +19,8 @@ import com.example.stylestock.ui.component.TitleComponent
 @Composable
 fun NotificationScreen(navController: NavController){
     Column {
-        Header()
-            TitleComponent(text = "Notifications")
+        Header(navController)
+            TitleComponent(text = "Notifications",true)
         Column(modifier = Modifier
             .padding(start = 33.dp)
             .verticalScroll(rememberScrollState())) {

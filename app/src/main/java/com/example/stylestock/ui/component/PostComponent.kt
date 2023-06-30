@@ -67,7 +67,6 @@ fun PostComponent(post: Post) {
                         .width(46.dp),
                     contentAlignment = Alignment.Center
                 ) {
-
                     AsyncImage(
                         contentScale = ContentScale.Inside,
                         modifier = Modifier
@@ -133,30 +132,3 @@ fun PostComponent(post: Post) {
 }
 
 
-@Preview
-@Composable
-fun PostComponentPreview() {
-    var post = Post(
-        1,
-        "New Aero Shoes",
-        "dsqjdlsqdmlqs",
-        Brand(
-            1,
-            "Adidas",
-            Image(
-                1,
-                "https://logos-marques.com/wp-content/uploads/2020/04/Adidas-logo.png",
-                "d"
-            ),
-        ),
-        listOf(
-            Image(
-                1,
-                "https://img.freepik.com/photos-gratuite/sneaker-qui-porte-mot-nike_123827-23436.jpg",
-                "d"
-            )
-        ),
-    )
-
-    PostComponent(post)
-}

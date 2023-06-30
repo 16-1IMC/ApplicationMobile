@@ -17,8 +17,8 @@ import com.example.stylestock.ui.component.TitleComponent
 @Composable
 fun NewBrandScreen(navController: NavController){
     Column {
-        Header()
-            TitleComponent(text = "New Brand")
+        Header(navController)
+            TitleComponent(text = "New Brand", true)
         Column(modifier = Modifier
             .padding(start = 33.dp)
             .verticalScroll(rememberScrollState())) {
