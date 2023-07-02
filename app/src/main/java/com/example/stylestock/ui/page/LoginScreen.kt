@@ -10,6 +10,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
@@ -17,6 +18,8 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -26,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.stylestock.R
+import com.example.stylestock.repository.UserStore
 import com.example.stylestock.ui.component.TitleComponent
 import com.example.stylestock.ui.theme.Jet
 import com.example.stylestock.ui.theme.Jura
@@ -33,8 +37,17 @@ import com.example.stylestock.ui.theme.K2D
 import com.example.stylestock.ui.theme.NeonBlue
 
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun LoginScreen(navController: NavController) {
+    val context = LocalContext.current
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val tokenValue = remember {
+        mutableStateOf(TextFieldValue())
+    }
+    val store = UserStore(context)
+    val tokenText = store.getAccessToken.collectAsState(initial = "")
+
 
     Column(
         modifier = Modifier
