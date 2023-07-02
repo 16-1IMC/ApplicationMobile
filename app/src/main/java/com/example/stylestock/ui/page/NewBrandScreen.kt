@@ -10,6 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.stylestock.modele.Adidas
+import com.example.stylestock.ui.component.BrandComponent
 import com.example.stylestock.ui.component.Header
 import com.example.stylestock.ui.component.NavBar
 import com.example.stylestock.ui.component.TitleComponent
@@ -22,6 +24,7 @@ fun NewBrandScreen(navController: NavController){
         Column(modifier = Modifier
             .padding(start = 33.dp)
             .verticalScroll(rememberScrollState())) {
+            BrandComponent(navController, Adidas)
         }
         Spacer(modifier = Modifier
             .height(70.dp))

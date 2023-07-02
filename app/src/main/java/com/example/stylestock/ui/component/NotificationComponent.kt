@@ -16,13 +16,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.stylestock.modele.Brand
 import com.example.stylestock.ui.theme.*
 
 
 @Composable
-fun NotificationComponent(brand: Brand) {
+fun NotificationComponent(navController: NavController, brand: Brand) {
     Spacer(modifier = Modifier.height(10.dp))
     Row(
         modifier = Modifier
@@ -30,28 +31,11 @@ fun NotificationComponent(brand: Brand) {
             .background(NeonBlue)
             .width(330.dp)
             .height(54.dp)
-            .clickable { System.out.println("Clicked") },
+            .clickable { navController.navigate("post/${brand.id}") },
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Spacer(modifier = Modifier.width(10.dp))
-        Box(
-            modifier = Modifier
-                .clip(shape = RoundedCornerShape(50.dp))
-                .background(Color.White)
-                .height(46.dp)
-                .width(46.dp),
-            contentAlignment = Alignment.Center
-        ) {
-
-            AsyncImage(
-                contentScale = ContentScale.Inside,
-                modifier = Modifier
-                    .background(Color.White)
-                    .size(30.dp),
-                model = brand.logo.path,
-                contentDescription = "logo"
-            )
-        }
+        LogoBrand(navController, brand,36.dp)
         Spacer(modifier = Modifier.width(10.dp))
         Row(
             modifier = Modifier

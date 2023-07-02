@@ -7,7 +7,7 @@ import androidx.navigation.compose.composable
 
 @Composable
 fun NavigationGraph(navController: NavHostController) {
-        NavHost(navController, startDestination = "follow") {
+        NavHost(navController, startDestination = "login") {
             composable(BottomNavItem.Follow.screen_route) { MyFollowScreen(navController) }
             composable(BottomNavItem.Trend.screen_route) { TrendScreen(navController) }
             composable(BottomNavItem.Notification.screen_route) { NotificationScreen(navController) }
@@ -17,5 +17,7 @@ fun NavigationGraph(navController: NavHostController) {
             composable("searchPost") { SearchPostScreen(navController) }
             composable("login") { LoginScreen(navController) }
             composable("register") { RegisterScreen(navController) }
+            composable("brand/{brandId}") { backStackEntry -> BrandScreen(navController, backStackEntry.arguments?.getString("brandId")) }
+            composable("post/{postId}") { backStackEntry -> PostScreen(navController, backStackEntry.arguments?.getString("postId")) }
         }
 }

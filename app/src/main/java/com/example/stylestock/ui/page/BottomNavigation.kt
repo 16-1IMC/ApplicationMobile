@@ -42,7 +42,6 @@ fun BottomNavigation(navController: NavController) {
                 .width(375.dp)
                 .clip(RoundedCornerShape(topStart = 50.dp, topEnd = 50.dp))
                 .height(67.dp),
-
         ) {
             val navBackStackEntry by navController.currentBackStackEntryAsState()
             val currentDestination = navBackStackEntry?.destination
@@ -66,15 +65,7 @@ fun BottomNavigation(navController: NavController) {
                         )
                     },
                     onClick = {
-                        navController.navigate(screen.screen_route) {
-                            navController.graph.startDestinationRoute?.let { screen_route ->
-                                popUpTo(screen_route) {
-                                    saveState = true
-                                }
-                            }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
+                        navController.navigate(screen.screen_route)
                     },
                 )
             }

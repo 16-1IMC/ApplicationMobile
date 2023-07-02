@@ -35,10 +35,10 @@ fun SearchBrandScreen(navController: NavController) {
         }
         Column(
             modifier = Modifier
-                .padding(start = 33.dp)
+                .padding(start = 12.dp, end = 12.dp)
                 .verticalScroll(rememberScrollState())
         ) {
-            BrandSearchComponent(Adidas)
+            BrandSearchComponent(navController, Adidas)
         }
         Spacer(
             modifier = Modifier

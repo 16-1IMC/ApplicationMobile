@@ -27,7 +27,7 @@ fun MyFollowScreen(navController: NavController) {
             .verticalScroll(rememberScrollState())) {
 
             for (i in 0..10){
-                PostComponent(AdidasPost)
+                PostComponent(navController, AdidasPost)
             }
             Spacer(modifier = Modifier
                 .height(70.dp))

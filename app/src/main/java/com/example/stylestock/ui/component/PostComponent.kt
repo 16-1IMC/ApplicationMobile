@@ -27,7 +27,7 @@ import com.example.stylestock.ui.theme.*
 import java.time.format.TextStyle
 
 @Composable
-fun PostComponent(post: Post) {
+fun PostComponent(navController: NavController, post: Post) {
 
     Spacer(
         modifier = Modifier
@@ -45,7 +45,7 @@ fun PostComponent(post: Post) {
             modifier = Modifier
                 .size(345.dp),
             contentScale = ContentScale.FillBounds,
-            model = post.image[0].path,
+            model = post.images[0].path,
             contentDescription = "background"
         )
         Column(
@@ -59,23 +59,7 @@ fun PostComponent(post: Post) {
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.End
             ) {
-                Box(
-                    modifier = Modifier
-                        .clip(shape = RoundedCornerShape(50.dp))
-                        .background(Color.White)
-                        .height(46.dp)
-                        .width(46.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    AsyncImage(
-                        contentScale = ContentScale.Inside,
-                        modifier = Modifier
-                            .background(Color.White)
-                            .size(30.dp),
-                        model = post.brand.logo.path,
-                        contentDescription = "logo"
-                    )
-                }
+                LogoBrand(navController, post.brand, 36.dp)
             }
             Row(
                 modifier = Modifier
@@ -116,7 +100,7 @@ fun PostComponent(post: Post) {
                         backgroundColor = NeonGreen,
                         contentColor = Color.White
                     ),
-                    onClick = {}) {
+                    onClick = {navController.navigate("post/${post.id}") }) {
                     Text(
                         textAlign = TextAlign.Center,
                         text = "View Post",

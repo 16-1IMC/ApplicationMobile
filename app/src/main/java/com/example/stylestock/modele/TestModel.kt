@@ -3,6 +3,7 @@ package com.example.stylestock.modele
 var Adidas = Brand(
     1,
     "Adidas",
+    "Adidas is a German multinational corporation, founded and headquartered in Herzogenaurach, Germany, that designs and manufactures shoes, clothing and accessories. It is the largest sportswear manufacturer in Europe, and the second largest in the world, after Nike.",
     Image(
         1,
         "https://logos-marques.com/wp-content/uploads/2020/04/Adidas-logo.png",
@@ -66,7 +67,7 @@ var AdidasPost = Post(
         ),
         Image(
             2,
-            "https://img.freepik.com/photos-gratuite/sneaker-qui-porte-mot-nike_123827-23436.jpg",
+            "https://assets.adidas.com/images/w_600,f_auto,q_auto/bfff95f0750341bf939daed70141260e_9366/Chaussure_NMD_V3_Blanc_GX9468_01_standard.jpg",
             "29/06/2023"
         ),
     ),

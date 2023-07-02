@@ -26,7 +26,7 @@ fun NotificationScreen(navController: NavController){
             .verticalScroll(rememberScrollState())) {
             Spacer(modifier = Modifier.height(15.dp))
             for (i in 0..10){
-                NotificationComponent(Adidas)
+                NotificationComponent(navController, Adidas)
             }
             Spacer(modifier = Modifier
                 .height(70.dp))

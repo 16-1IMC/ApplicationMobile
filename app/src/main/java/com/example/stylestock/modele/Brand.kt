@@ -3,6 +3,7 @@ package com.example.stylestock.modele
 data class Brand(
     val id: Int,
     val name: String,
+    val description: String,
     val logo: Image,
     val banner: Image,
     val email: String ="",
