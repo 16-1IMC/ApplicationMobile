@@ -19,10 +19,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -153,7 +152,7 @@ fun BrandScreen(navController: NavController, brandId: String?) {
                                             .height(30.dp),
                                         onClick = { /*TODO*/ },
                                         colors = ButtonDefaults.buttonColors(
-                                            backgroundColor = Color(0x4265F543),
+                                            containerColor = Color(0x4265F543),
                                             contentColor = Color.White,
 
                                             ),

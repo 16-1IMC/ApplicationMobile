@@ -1,5 +1,7 @@
 package com.example.stylestock.ui.page
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -8,6 +10,14 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,25 +27,34 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.stylestock.R
+import com.example.stylestock.repository.ApiRepository
+import com.example.stylestock.repository.UserRepository
 import com.example.stylestock.ui.component.TitleComponent
 import com.example.stylestock.ui.theme.Jet
 import com.example.stylestock.ui.theme.Jura
 import com.example.stylestock.ui.theme.K2D
 import com.example.stylestock.ui.theme.NeonBlue
+import kotlinx.coroutines.launch
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterScreen(navController: NavController) {
-
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
     Column(
         modifier = Modifier
             .fillMaxSize(),
@@ -80,6 +99,8 @@ fun RegisterScreen(navController: NavController) {
             var textLogin by remember { mutableStateOf(TextFieldValue("")) }
             var textPassword by remember { mutableStateOf(TextFieldValue("")) }
             var textConfirmPassword by remember { mutableStateOf(TextFieldValue("")) }
+            var textErrorLogin by remember { mutableStateOf("") }
+            var textErrorPassword by remember { mutableStateOf("") }
             Column(
                 modifier = Modifier
                     .fillMaxWidth(),
@@ -100,7 +121,18 @@ fun RegisterScreen(navController: NavController) {
                     singleLine = true,
                     label = { Text(text = "Email address") },
                     placeholder = { Text(text = "Enter your e-mail") },
-                    colors = androidx.compose.material.TextFieldDefaults.outlinedTextFieldColors(
+                    supportingText = {
+                        Text(
+                            text = textErrorLogin,
+                            style = TextStyle(
+                                color = Color.Red,
+                                fontSize = 10.sp,
+                                fontFamily = K2D,
+                                fontWeight = FontWeight.Normal,
+                            )
+                        )
+                    },
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
                         focusedBorderColor = NeonBlue,
                         unfocusedBorderColor = Color.Black,
                         focusedLabelColor = NeonBlue,
@@ -108,7 +140,7 @@ fun RegisterScreen(navController: NavController) {
                         cursorColor = NeonBlue,
                     ),
                 )
-                Spacer(modifier = Modifier.height(10.dp))
+                var passwordVisible by remember { mutableStateOf(false) }
                 OutlinedTextField(
                     textStyle = androidx.compose.ui.text.TextStyle(
                         color = Jet,
@@ -123,15 +155,41 @@ fun RegisterScreen(navController: NavController) {
                     singleLine = true,
                     label = { Text(text = "Password") },
                     placeholder = { Text(text = "Enter your password") },
-                    colors = androidx.compose.material.TextFieldDefaults.outlinedTextFieldColors(
+                    supportingText = {
+                        Text(
+                            text = textErrorPassword,
+                            style = TextStyle(
+                                color = Color.Red,
+                                fontSize = 10.sp,
+                                fontFamily = K2D,
+                                fontWeight = FontWeight.Normal,
+                            )
+                        )
+                    },
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
                         focusedBorderColor = NeonBlue,
                         unfocusedBorderColor = Color.Black,
                         focusedLabelColor = NeonBlue,
                         unfocusedLabelColor = Color.Black,
                         cursorColor = NeonBlue,
                     ),
+                    visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                    trailingIcon = {
+                        val image = if (passwordVisible)
+                            Icons.Filled.Visibility
+                        else Icons.Filled.VisibilityOff
+
+                        // Please provide localized description for accessibility services
+                        val description = if (passwordVisible) "Hide password" else "Show password"
+
+                        androidx.compose.material3.IconButton(onClick = {
+                            passwordVisible = !passwordVisible
+                        }) {
+                            androidx.compose.material3.Icon(imageVector = image, description)
+                        }
+                    },
                 )
-                Spacer(modifier = Modifier.height(10.dp))
+                var passwordConfirmVisible by remember { mutableStateOf(false) }
                 OutlinedTextField(
                     textStyle = androidx.compose.ui.text.TextStyle(
                         color = Jet,
@@ -139,31 +197,96 @@ fun RegisterScreen(navController: NavController) {
                         fontFamily = K2D,
                         fontWeight = FontWeight.Normal,
                     ),
-                    value = textPassword,
+                    value = textConfirmPassword,
                     onValueChange = {
-                        textPassword = it
+                        textConfirmPassword = it
                     },
                     singleLine = true,
                     label = { Text(text = "Confirm Password") },
                     placeholder = { Text(text = "Confirm your Password") },
-                    colors = androidx.compose.material.TextFieldDefaults.outlinedTextFieldColors(
+                    supportingText = {
+                        Text(
+                            text = textErrorPassword,
+                            style = TextStyle(
+                                color = Color.Red,
+                                fontSize = 10.sp,
+                                fontFamily = K2D,
+                                fontWeight = FontWeight.Normal,
+                            )
+                        )
+                    },
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
                         focusedBorderColor = NeonBlue,
                         unfocusedBorderColor = Color.Black,
                         focusedLabelColor = NeonBlue,
                         unfocusedLabelColor = Color.Black,
                         cursorColor = NeonBlue,
                     ),
+                    visualTransformation = if (passwordConfirmVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                    trailingIcon = {
+                        val image = if (passwordConfirmVisible)
+                            Icons.Filled.Visibility
+                        else Icons.Filled.VisibilityOff
+
+                        // Please provide localized description for accessibility services
+                        val description = if (passwordConfirmVisible) "Hide password" else "Show password"
+
+                        androidx.compose.material3.IconButton(onClick = {
+                            passwordConfirmVisible = !passwordConfirmVisible
+                        }) {
+                            androidx.compose.material3.Icon(imageVector = image, description)
+                        }
+                    },
                 )
-                Spacer(modifier = Modifier.height(30.dp))
+                Spacer(modifier = Modifier.height(15.dp))
                 Button(
                     modifier = Modifier
                         .clip(RoundedCornerShape(50))
                         .width(250.dp),
                     colors = ButtonDefaults.buttonColors(
-                        backgroundColor = NeonBlue,
+                        containerColor = NeonBlue,
                         contentColor = Color.White
                     ),
-                    onClick = { navController.navigate("login") }) {
+                    onClick = {
+                        scope.launch {
+                            if (android.util.Patterns.EMAIL_ADDRESS.matcher(textLogin.text)
+                                    .matches()
+                            ) {
+
+                                if (textPassword.text == textConfirmPassword.text) {
+                                    val res =
+                                        UserRepository().createUser(
+                                            textLogin.text,
+                                            textPassword.text
+                                        )
+
+                                    if (res != "") {
+                                        Log.d("styleStock", "Create user")
+                                        navController.navigate("login")
+                                        Toast.makeText(
+                                            context,
+                                            "Your account has been created",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                        navController.navigate("login")
+                                    } else {
+                                        Toast.makeText(
+                                            context,
+                                            "Something went wrong",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                } else {
+                                    textErrorPassword = "Password not match"
+                                    textErrorLogin = ""
+                                }
+                            } else {
+                                textErrorLogin = "Invalid email address"
+                                textErrorPassword = ""
+                            }
+                        }
+
+                    }) {
                     Text(
                         text = "Register",
                         color = Color.White,
@@ -183,7 +306,7 @@ fun RegisterScreen(navController: NavController) {
                     )
                     ClickableText(
                         text = AnnotatedString("Sign in"),
-                        onClick = {navController.navigate("login")},
+                        onClick = { navController.navigate("login") },
                         style = androidx.compose.ui.text.TextStyle(
                             color = NeonBlue,
                             fontSize = 16.sp,
@@ -204,7 +327,10 @@ fun RegisterScreen(navController: NavController) {
                     )
                     ClickableText(
                         text = AnnotatedString("Contact us"),
-                        onClick = {},
+                        onClick = {
+
+
+                        },
                         style = androidx.compose.ui.text.TextStyle(
                             color = NeonBlue,
                             fontSize = 16.sp,

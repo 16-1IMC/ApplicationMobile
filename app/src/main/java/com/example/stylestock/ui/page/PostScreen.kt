@@ -21,11 +21,11 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -210,7 +210,7 @@ fun PostScreen(navController: NavController, postId: String?) {
                     modifier = Modifier
                         .clip(RoundedCornerShape(25.dp)),
                     colors = ButtonDefaults.buttonColors(
-                        backgroundColor = NeonGreen,
+                        containerColor = NeonGreen,
                         contentColor = Color.Black,
                         ),
                 ) {
