@@ -38,6 +38,7 @@ fun NavigationGraph(navController: NavHostController) {
         composable("searchPost") { SearchPostScreen(navController) }
         composable("login") { LoginScreen(navController) }
         composable("register") { RegisterScreen(navController) }
+        composable("create") { CreatePostScreen(navController) }
         composable("brand/{brandId}") { backStackEntry ->
             BrandScreen(
                 navController,

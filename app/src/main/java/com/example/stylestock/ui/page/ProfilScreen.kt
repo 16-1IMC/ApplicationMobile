@@ -98,12 +98,21 @@ fun ProfilScreen(navController: NavController) {
                 )
             }
         )
-        Column(
-            modifier = Modifier
-                .padding(start = 33.dp)
-                .verticalScroll(rememberScrollState())
-        ) {
-        }
+        Button(
+            content = {
+                Text(
+                    text = "Create Post",
+                    style = TextStyle(
+                        fontFamily = K2D,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp,
+                        color = Color.Black
+                    )
+                )
+            },
+            onClick = {
+                navController.navigate("create")
+            })
         Spacer(
             modifier = Modifier
                 .height(70.dp)
