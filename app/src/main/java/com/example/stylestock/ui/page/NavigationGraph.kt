@@ -16,24 +16,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
 @Composable
-fun NavigationGraph(navController: NavHostController) {
+fun NavigationGraph(navController: NavHostController, start: String="login") {
     val context = LocalContext.current
-    val apiKey = runBlocking { UserStore(context).getAccessToken.first() }
-    var start = "login"
-    if (apiKey != "") {
-        Log.d("styleStock", apiKey)
-        val user = runBlocking {
-            if (UserStore(context).getIsBrand.first()) {
-                BrandRepository(apiKey).getBrandById(UserStore(context).getUserId.first())
-            } else {
-                UserRepository(apiKey).getUserById(UserStore(context).getUserId.first())
-            }
-
-        }
-        if (user != "") {
-            start = "follow"
-        }
-    }
 
     NavHost(navController, startDestination = start) {
         composable(BottomNavItem.Follow.screen_route) { MyFollowScreen(navController) }

@@ -36,7 +36,6 @@ class FollowRepository(apiKey: String = ""){
                     .build()
                 val response = client.newCall(request).execute()
                 result = response.body?.string() ?: ""
-                Log.d("styleStock", "user : $userId, brand : $brandId, result : $result")
                 var follow =Gson().fromJson(result, Array<FollowAll>::class.java)
                 if (follow.isNotEmpty()) {
                     return@withContext follow[0]
@@ -98,8 +97,7 @@ class FollowRepository(apiKey: String = ""){
         return withContext(Dispatchers.IO) {
             var result: String? = null
             try {
-                var follow = getFollow(userId, brandId)
-                val url = URL(BaseUrl + "/follows/${follow?.id}")
+                val url = URL(BaseUrl + "/follows?brandId=${brandId}&userId=${userId}")
                 val request = Request.Builder()
                     .headers(headers)
                     .delete()

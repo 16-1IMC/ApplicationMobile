@@ -21,24 +21,37 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.stylestock.modele.Brand
+import com.example.stylestock.repository.BrandRepository
+import com.example.stylestock.repository.UserStore
 import com.example.stylestock.ui.theme.K2D
 import com.example.stylestock.ui.theme.NeonGreen
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 
 @Composable
 fun BrandComponent(navController: NavController, brand: Brand) {
+    var context = LocalContext.current
     Spacer(modifier = Modifier.height(15.dp))
     Box(
         modifier = Modifier
             .width(345.dp)
             .height(586.dp)
             .clip(shape = RoundedCornerShape(33.dp))
-            .clickable { navController.navigate("brand/${brand.id}") }
+            .clickable {
+                runBlocking {
+                    val res = BrandRepository(UserStore(context).getAccessToken.first() ).getBrandById(brand.id.toString())
+                    if (res != null) {
+                        navController.navigate("brand/${brand.id}") }
+                    }
+                }
+
     ) {
         AsyncImage(
             model = brand.banner.path,

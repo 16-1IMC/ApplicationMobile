@@ -49,7 +49,7 @@ import androidx.navigation.NavController
 import com.example.stylestock.R
 import com.example.stylestock.modele.ApiKey
 import com.example.stylestock.modele.User
-import com.example.stylestock.modele.Users
+import com.example.stylestock.modele.UserALl
 import com.example.stylestock.repository.ApiRepository
 import com.example.stylestock.repository.UserRepository
 import com.example.stylestock.repository.UserStore
@@ -230,7 +230,7 @@ fun LoginScreen(navController: NavController) {
                                         UserRepository(token.token).getUserByEmail(textLogin.text)
                                     if (resUser != "") {
                                         Log.d("styleStock", resUser)
-                                        val user = Gson().fromJson(resUser, Array<User>::class.java)
+                                        val user = Gson().fromJson(resUser, Array<UserALl>::class.java)
                                         UserStore(context).saveToken(
                                             token.token,
                                             user[0].id.toString(),

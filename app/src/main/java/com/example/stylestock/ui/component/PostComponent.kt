@@ -59,7 +59,7 @@ fun PostComponent(navController: NavController, post: Post) {
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.End
             ) {
-                LogoBrand(navController, post.brand, 36.dp)
+                LogoBrand(navController, post.author, 36.dp)
             }
             Row(
                 modifier = Modifier

@@ -38,6 +38,7 @@ class BrandRepository(apiKey: String = "") {
                 result = response.body?.string() ?: ""
                 val brands = Gson().fromJson(result, Array<BrandAll>::class.java)
                 if (response.isSuccessful && brands != null){
+                    Log.d("styleStock", result)
                     return@withContext BrandAllToBrands(brands)
                 } else {
                     Log.d("styleStock", result)

@@ -18,7 +18,7 @@ data class BrandAll(
     val id: Int,
     val name: String,
     val description: String="",
-    val logo: Image = Image(0,"https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Minecraft_missing_texture_block.svg/2048px-Minecraft_missing_texture_block.svg.png",""),
+    val profilePicture: Image = Image(0,"https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Minecraft_missing_texture_block.svg/2048px-Minecraft_missing_texture_block.svg.png",""),
     val banner: Image = Image(0,"https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Minecraft_missing_texture_block.svg/2048px-Minecraft_missing_texture_block.svg.png",""),
     val email: String ="",
     val socialNetworks: List<String> = emptyList(),

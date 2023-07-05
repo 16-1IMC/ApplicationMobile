@@ -1,6 +1,7 @@
 package com.example.stylestock.ui.page
 
 import android.media.tv.TvContract.Channels.Logo
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -123,7 +124,8 @@ fun PostScreen(navController: NavController, postId: String?) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Spacer(modifier = Modifier.width(6.dp))
-                LogoBrand(navController = navController, brand = post.brand, size = 66.dp)
+                Log.d( "styleStock","Brand id = $post.brand.id")
+                LogoBrand(navController = navController, brand = post.author, size = 66.dp)
                 Spacer(modifier = Modifier.width(10.dp))
                 Column(
                     verticalArrangement = Arrangement.Center,
@@ -230,7 +232,7 @@ fun PostScreen(navController: NavController, postId: String?) {
                         .fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceAround
                 ) {
-                    post.brand.categories.forEach {
+                    post.author.categories.forEach {
                         Text(
                             text = it.name,
                             fontSize = 16.sp,

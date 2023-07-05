@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -21,6 +22,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,10 +34,12 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.stylestock.modele.Brand
@@ -57,16 +61,24 @@ import kotlinx.coroutines.runBlocking
 @Composable
 fun BrandScreen(navController: NavController, brandId: String?) {
     var context = LocalContext.current
+    var apiKey = runBlocking { UserStore(context).getAccessToken.first() }
     var brand by remember { mutableStateOf<Brand>(Brand()) }
     var isFollow by remember { mutableStateOf(false) }
-    isFollow = runBlocking {
-        UserRepository(UserStore(context).getAccessToken.first()).getUserIsFollow(
+
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+
+    runBlocking {
+        isFollow = UserRepository(apiKey).getUserIsFollow(
             UserStore(context).getUserId.first(),
             brandId!!
         )
     }
+
+
+
     runBlocking {
-        val res = BrandRepository(UserStore(context).getAccessToken.first()).getBrandById(brandId!!)
+        val res = BrandRepository(apiKey).getBrandById(brandId!!)
         if (res != null) {
             brand = res
         }
@@ -148,7 +160,7 @@ fun BrandScreen(navController: NavController, brandId: String?) {
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
                                     var followerCount = runBlocking {
-                                        BrandRepository(UserStore(context).getAccessToken.first()).getNbFollower(
+                                        BrandRepository(apiKey).getNbFollower(
                                             brandId!!
                                         )
                                     }
@@ -172,26 +184,32 @@ fun BrandScreen(navController: NavController, brandId: String?) {
                                         onClick = {
                                             runBlocking {
                                                 if (isFollow) {
-
-                                                    FollowRepository(UserStore(context).getAccessToken.first()).removeFollow(
+                                                    var res = FollowRepository(apiKey).removeFollow(
                                                         UserStore(context).getUserId.first(),
                                                         brandId!!
                                                     )
-                                                    followerCount -= 1
-                                                    isFollow = false
+                                                    if (res != "") {
+                                                        followerCount -= 1
+                                                        isFollow = false
+                                                    }
                                                 } else {
-                                                    FollowRepository(UserStore(context).getAccessToken.first()).addFollower(
+                                                    var res = FollowRepository(apiKey).addFollower(
                                                         UserStore(context).getUserId.first(),
                                                         brandId!!
                                                     )
-                                                    followerCount += 1
-                                                    isFollow = true
+                                                    if (res != "") {
+
+                                                        followerCount += 1
+                                                        isFollow = true
+                                                    }
                                                 }
                                             }
 
                                         },
                                         colors = ButtonDefaults.buttonColors(
-                                            containerColor = if (!isFollow) Color(0x4265F543) else NeonGreen,
+                                            containerColor = if (isFollow) NeonGreen else Color(
+                                                0x4265F543
+                                            ),
                                             contentColor = Color.White,
 
                                             ),

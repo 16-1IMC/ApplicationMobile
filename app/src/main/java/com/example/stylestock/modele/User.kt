@@ -8,6 +8,7 @@ data class User(
     val follows: List<Brand>,
 )
 
-data class Users(
-    val users: List<User>
+data class UserALl(
+    val id: Int,
+    val email: String,
 )
