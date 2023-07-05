@@ -1,6 +1,6 @@
 package com.example.stylestock.ui.page
 
-import androidx.compose.foundation.Image
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -9,11 +9,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
@@ -32,31 +30,47 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import com.example.stylestock.modele.Adidas
-import com.example.stylestock.modele.AdidasPost
 import com.example.stylestock.modele.Brand
+import com.example.stylestock.repository.BrandRepository
+import com.example.stylestock.repository.FollowRepository
+import com.example.stylestock.repository.UserRepository
+import com.example.stylestock.repository.UserStore
 import com.example.stylestock.ui.component.BackArrowComponent
+import com.example.stylestock.ui.component.LightPostComponent
 import com.example.stylestock.ui.component.LogoBrand
-import com.example.stylestock.ui.component.PostComponent
 import com.example.stylestock.ui.component.TitleComponent
 import com.example.stylestock.ui.theme.Jura
 import com.example.stylestock.ui.theme.K2D
 import com.example.stylestock.ui.theme.NeonGreen
-import com.example.stylestock.ui.theme.WhiteSmoke
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 
 
 @Composable
 fun BrandScreen(navController: NavController, brandId: String?) {
-    val brand = Adidas
+    var context = LocalContext.current
+    var brand by remember { mutableStateOf<Brand>(Brand()) }
+    var isFollow by remember { mutableStateOf(false) }
+    isFollow = runBlocking {
+        UserRepository(UserStore(context).getAccessToken.first()).getUserIsFollow(
+            UserStore(context).getUserId.first(),
+            brandId!!
+        )
+    }
+    runBlocking {
+        val res = BrandRepository(UserStore(context).getAccessToken.first()).getBrandById(brandId!!)
+        if (res != null) {
+            brand = res
+        }
+    }
     Box() {
         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
             Box(
@@ -133,8 +147,13 @@ fun BrandScreen(navController: NavController, brandId: String?) {
                                 Row(
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
+                                    var followerCount = runBlocking {
+                                        BrandRepository(UserStore(context).getAccessToken.first()).getNbFollower(
+                                            brandId!!
+                                        )
+                                    }
                                     Text(
-                                        text = "1 Follow",
+                                        text = "$followerCount followers",
                                         fontSize = 16.sp,
                                         fontFamily = K2D,
                                         fontWeight = FontWeight.Normal,
@@ -150,9 +169,29 @@ fun BrandScreen(navController: NavController, brandId: String?) {
                                             )
                                             .width(70.dp)
                                             .height(30.dp),
-                                        onClick = { /*TODO*/ },
+                                        onClick = {
+                                            runBlocking {
+                                                if (isFollow) {
+
+                                                    FollowRepository(UserStore(context).getAccessToken.first()).removeFollow(
+                                                        UserStore(context).getUserId.first(),
+                                                        brandId!!
+                                                    )
+                                                    followerCount -= 1
+                                                    isFollow = false
+                                                } else {
+                                                    FollowRepository(UserStore(context).getAccessToken.first()).addFollower(
+                                                        UserStore(context).getUserId.first(),
+                                                        brandId!!
+                                                    )
+                                                    followerCount += 1
+                                                    isFollow = true
+                                                }
+                                            }
+
+                                        },
                                         colors = ButtonDefaults.buttonColors(
-                                            containerColor = Color(0x4265F543),
+                                            containerColor = if (!isFollow) Color(0x4265F543) else NeonGreen,
                                             contentColor = Color.White,
 
                                             ),
@@ -214,9 +253,8 @@ fun BrandScreen(navController: NavController, brandId: String?) {
                 modifier = Modifier
                     .padding(start = 33.dp)
             ) {
-
-                for (i in 0..10) {
-                    PostComponent(navController, AdidasPost)
+                brand.posts.forEach {
+                    LightPostComponent(navController, it)
                 }
                 Spacer(
                     modifier = Modifier

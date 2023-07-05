@@ -1,22 +1,26 @@
 package com.example.stylestock.repository
 
 import android.util.Log
+import com.example.stylestock.modele.Brand
+import com.example.stylestock.modele.BrandAll
+import com.example.stylestock.modele.FollowAll
+import com.example.stylestock.modele.Image
+import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.Headers
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.RequestBody.Companion.toRequestBody
 import java.net.URL
 
-class UserRepository(apiKey: String = "") {
+class BrandRepository(apiKey: String = "") {
+
     val apiKey = apiKey
     val BaseUrl = "http://thegoodnetwork.fr/index.php/api"
     var client: OkHttpClient = OkHttpClient()
 
-    suspend fun getUserById(id: String): String {
-        Log.d("styleStock", "getUserById")
+    suspend fun getBrandAll(): Array<Brand>? {
+        Log.d("styleStock", "getBrands")
         val headers = Headers.Builder()
             .add("Accept", "application/json")
             .add("Authorization", """Bearer ${this.apiKey}""")
@@ -24,7 +28,7 @@ class UserRepository(apiKey: String = "") {
         return withContext(Dispatchers.IO) {
             var result: String? = null
             try {
-                val url = URL(BaseUrl + """/users/${id}""")
+                val url = URL(BaseUrl + """/brands?order%5Bcreated_at%5D=asc&status=APPROVED""")
                 val request = Request.Builder()
                     .headers(headers)
                     .get()
@@ -32,27 +36,22 @@ class UserRepository(apiKey: String = "") {
                     .build()
                 val response = client.newCall(request).execute()
                 result = response.body?.string() ?: ""
-                if (response.isSuccessful) {
-                    return@withContext result
+                val brands = Gson().fromJson(result, Array<BrandAll>::class.java)
+                if (response.isSuccessful && brands != null){
+                    return@withContext BrandAllToBrands(brands)
                 } else {
                     Log.d("styleStock", result)
-                    return@withContext ""
+                    return@withContext null
                 }
             } catch (err: Error) {
                 Log.d("styleStock", err.toString())
-                return@withContext ""
+                return@withContext null
             }
         }
     }
 
-    suspend fun getUserByEmail(email: String): String {
-        Log.d("styleStock", "getUserByEmail")
-        val json = """
-            {
-                "email": "$email"
-            }
-        """.trimIndent()
-        val body = json.toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull())
+    suspend fun getBrandByName(name:String) : Array<Brand>? {
+        Log.d("styleStock", "getBrandByName")
         val headers = Headers.Builder()
             .add("Accept", "application/json")
             .add("Authorization", """Bearer ${this.apiKey}""")
@@ -60,7 +59,7 @@ class UserRepository(apiKey: String = "") {
         return withContext(Dispatchers.IO) {
             var result: String? = null
             try {
-                val url = URL(BaseUrl + """/users?email=${email}""")
+                val url = URL(BaseUrl + """/brands?name=$name&order%5Bcreated_at%5D=asc&status=APPROVED""")
                 val request = Request.Builder()
                     .headers(headers)
                     .get()
@@ -68,59 +67,22 @@ class UserRepository(apiKey: String = "") {
                     .build()
                 val response = client.newCall(request).execute()
                 result = response.body?.string() ?: ""
-                if (response.isSuccessful) {
-                    return@withContext result
+                val brands = Gson().fromJson(result, Array<BrandAll>::class.java)
+                if (response.isSuccessful && brands != null){
+                    return@withContext BrandAllToBrands(brands)
                 } else {
                     Log.d("styleStock", result)
-                    return@withContext ""
+                    return@withContext null
                 }
             } catch (err: Error) {
                 Log.d("styleStock", err.toString())
-                return@withContext ""
+                return@withContext null
             }
         }
     }
 
-    suspend fun createUser(email: String, password: String): String {
-        Log.d("styleStock", "createUser")
-        val json = """
-            {
-                "email": "$email",
-                "plainPassword": "$password"
-            }
-        """.trimIndent()
-        val body = json.toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull())
-        val headers = Headers.Builder()
-            .add("Accept", "application/json")
-            .build()
-        return withContext(Dispatchers.IO) {
-            var result: String? = null
-            try {
-                val url = URL(BaseUrl + "/users/register")
-                val request = Request.Builder()
-                    .headers(headers)
-                    .post(body)
-                    .url(url)
-                    .build()
-                val response = client.newCall(request).execute()
-                result = response.body?.string() ?: ""
-
-                if (response.isSuccessful) {
-
-                    return@withContext result
-                } else {
-                    Log.d("styleStock", result)
-                    return@withContext ""
-                }
-            } catch (err: Error) {
-                Log.d("styleStock", err.toString())
-                return@withContext ""
-            }
-        }
-    }
-
-    suspend fun deleteUserById(id: String): String {
-        Log.d("styleStock", "deleteUserById")
+    suspend fun getBrandById(id: String): Brand? {
+        Log.d("styleStock", "getBrand")
         val headers = Headers.Builder()
             .add("Accept", "application/json")
             .add("Authorization", """Bearer ${this.apiKey}""")
@@ -128,7 +90,40 @@ class UserRepository(apiKey: String = "") {
         return withContext(Dispatchers.IO) {
             var result: String? = null
             try {
-                val url = URL(BaseUrl + """/users/${id}""")
+                val url = URL(BaseUrl + """/brands/$id""")
+                val request = Request.Builder()
+                    .headers(headers)
+                    .get()
+                    .url(url)
+                    .build()
+                val response = client.newCall(request).execute()
+                result = response.body?.string() ?: ""
+                val brand = Gson().fromJson(result, Brand::class.java)
+                if (response.isSuccessful) {
+                    return@withContext brand
+                } else {
+                    Log.d("styleStock", result)
+                    return@withContext null
+                }
+            } catch (err: Error) {
+                Log.d("styleStock", err.toString())
+                return@withContext null
+            }
+        }
+    }
+
+
+
+    suspend fun deleteBrandById(id: String): String {
+        Log.d("styleStock", "deleteBrandById")
+        val headers = Headers.Builder()
+            .add("Accept", "application/json")
+            .add("Authorization", """Bearer ${this.apiKey}""")
+            .build()
+        return withContext(Dispatchers.IO) {
+            var result: String? = null
+            try {
+                val url = URL(BaseUrl + """/brands/${id}""")
                 val request = Request.Builder()
                     .headers(headers)
                     .delete()
@@ -149,14 +144,9 @@ class UserRepository(apiKey: String = "") {
         }
     }
 
-    suspend fun getUserIsFollow(userId: String, brandId: String): Boolean{
-        Log.d("styleStock", "getUserIsFollow")
-        var res = FollowRepository(apiKey).getFollow(userId, brandId)
-        return res !=null
-    }
-
-    suspend fun getUserFollower(userId: String): String {
-        Log.d("styleStock", "getUserFollower")
+    suspend fun getNbFollower(brandId:String):Int{
+        Log.d("styleStock", "getNbFollower")
+        var brandId = brandId;
         val headers = Headers.Builder()
             .add("Accept", "application/json")
             .add("Authorization", """Bearer ${this.apiKey}""")
@@ -164,7 +154,7 @@ class UserRepository(apiKey: String = "") {
         return withContext(Dispatchers.IO) {
             var result: String? = null
             try {
-                val url = URL(BaseUrl + """/follow?user=${userId}""")
+                val url = URL(BaseUrl + "/follows?brand=$brandId")
                 val request = Request.Builder()
                     .headers(headers)
                     .get()
@@ -172,22 +162,42 @@ class UserRepository(apiKey: String = "") {
                     .build()
                 val response = client.newCall(request).execute()
                 result = response.body?.string() ?: ""
+                val followers = Gson().fromJson(result, Array<FollowAll>::class.java)
                 if (response.isSuccessful) {
-                    return@withContext result
+                    return@withContext followers.size
                 } else {
                     Log.d("styleStock", result)
-                    return@withContext ""
+                    return@withContext 0
                 }
             } catch (err: Error) {
                 Log.d("styleStock", err.toString())
-                return@withContext ""
+                return@withContext 0
             }
         }
     }
+}
 
-    suspend fun getUserIsLiked(userId: String, postId: String): Boolean{
-        Log.d("styleStock", "getUserIsLiked")
-        var res = LikeRepository(apiKey).getLike(userId, postId)
-        return res !=null
+fun BrandAllToBrands(brandAll: Array<BrandAll>): Array<Brand> {
+    var brands: Array<Brand> = emptyArray()
+    for (brand in brandAll) {
+        brands += Brand(
+            id = brand.id,
+            name = brand.name,
+            logo = Image(
+                0,
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Minecraft_missing_texture_block.svg/2048px-Minecraft_missing_texture_block.svg.png",
+                ""
+            ),
+            banner = Image(
+                0,
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Minecraft_missing_texture_block.svg/2048px-Minecraft_missing_texture_block.svg.png",
+                ""
+            ),
+            categories = brand.categories,
+
+            )
     }
+    return brands
+
+
 }

@@ -37,6 +37,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -46,6 +47,11 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.stylestock.R
 import com.example.stylestock.modele.AdidasPost
+import com.example.stylestock.modele.Post
+import com.example.stylestock.repository.LikeRepository
+import com.example.stylestock.repository.PostRepository
+import com.example.stylestock.repository.UserRepository
+import com.example.stylestock.repository.UserStore
 import com.example.stylestock.ui.component.BackArrowComponent
 import com.example.stylestock.ui.component.DotIndicatorsComponent
 import com.example.stylestock.ui.component.LogoBrand
@@ -55,12 +61,33 @@ import com.example.stylestock.ui.theme.Jura
 import com.example.stylestock.ui.theme.K2D
 import com.example.stylestock.ui.theme.NeonGreen
 import com.example.stylestock.ui.theme.WhiteSmoke
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PostScreen(navController: NavController, postId: String?) {
-    val post = AdidasPost
+    var context = LocalContext.current
+
+    var post by remember {
+        mutableStateOf<Post>(Post())
+    }
+    var isLiked by remember {
+        mutableStateOf(false)
+    }
+    isLiked = runBlocking {
+        UserRepository(UserStore(context).getAccessToken.first()).getUserIsLiked(
+            UserStore(context).getUserId.first(),
+            postId!!
+        )
+    }
+    runBlocking {
+        val res = PostRepository(UserStore(context).getAccessToken.first()).getPostById(postId!!)
+        if (res != null) {
+            post = res
+        }
+    }
     Box {
         Column(
             modifier = Modifier
@@ -130,8 +157,13 @@ fun PostScreen(navController: NavController, postId: String?) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
+                        var likeCount = runBlocking {
+                            PostRepository(UserStore(context).getAccessToken.first()).getNbLike(
+                                postId!!
+                            )
+                        }
                         Text(
-                            text = "1200 Likes",
+                            text = "$likeCount Likes",
                             style = androidx.compose.ui.text.TextStyle(
                                 fontSize = 16.sp,
                                 fontFamily = K2D,
@@ -144,10 +176,30 @@ fun PostScreen(navController: NavController, postId: String?) {
                             modifier = Modifier
                                 .size(20.dp),
                             onClick = {
+                                if (isLiked) {
+                                    runBlocking {
+                                        LikeRepository(UserStore(context).getAccessToken.first()).removeLike(
+                                            UserStore(context).getUserId.first(),
+                                            postId!!
+                                        )
+                                        likeCount -= 1
+                                        isLiked = false
+                                    }
+                                } else {
+                                    runBlocking {
+                                        LikeRepository(UserStore(context).getAccessToken.first()).addLike(
+                                            UserStore(context).getUserId.first(),
+                                            postId!!
+                                        )
+                                        likeCount += 1
+                                        isLiked = true
+                                    }
+                                }
 
-                            }) {
+                            }
+                        ) {
                             Image(
-                                painter = painterResource(id = R.drawable.like_empty_icon),
+                                painter = painterResource(id = if (isLiked) R.drawable.like_fille_icon else R.drawable.like_empty_icon),
                                 contentDescription = "back",
                                 modifier = Modifier
                                     .size(20.dp)
@@ -212,7 +264,7 @@ fun PostScreen(navController: NavController, postId: String?) {
                     colors = ButtonDefaults.buttonColors(
                         containerColor = NeonGreen,
                         contentColor = Color.Black,
-                        ),
+                    ),
                 ) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,

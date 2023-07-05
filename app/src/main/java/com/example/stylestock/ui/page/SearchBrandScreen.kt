@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
@@ -39,6 +40,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.stylestock.R
 import com.example.stylestock.modele.Adidas
+import com.example.stylestock.modele.Brand
+import com.example.stylestock.repository.BrandRepository
+import com.example.stylestock.repository.UserStore
 import com.example.stylestock.ui.component.BrandSearchComponent
 import com.example.stylestock.ui.component.Header
 import com.example.stylestock.ui.component.TitleClickableComponent
@@ -46,10 +50,14 @@ import com.example.stylestock.ui.component.TitleComponent
 import com.example.stylestock.ui.theme.Jet
 import com.example.stylestock.ui.theme.K2D
 import com.example.stylestock.ui.theme.NeonBlue
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 
 
 @Composable
 fun SearchBrandScreen(navController: NavController) {
+    var context = LocalContext.current
+    var brands by remember { mutableStateOf<List<Brand>>(emptyList()) }
     Column {
         Row(
             modifier = Modifier
@@ -96,7 +104,12 @@ fun SearchBrandScreen(navController: NavController) {
                 },
                 trailingIcon = {
                     IconButton(onClick = {
-                        Log.d("styleStock", "search")
+                        runBlocking {
+                            var res = BrandRepository(UserStore(context).getAccessToken.first()).getBrandByName(textSearch.text)
+                            if (res != null) {
+                                brands = res.asList()
+                            }
+                        }
                     }) {
                         Icon(
                             painter = painterResource(id = R.drawable.icon_search),
@@ -125,7 +138,9 @@ fun SearchBrandScreen(navController: NavController) {
                 .padding(start = 12.dp, end = 12.dp)
                 .verticalScroll(rememberScrollState())
         ) {
-            BrandSearchComponent(navController, Adidas)
+            brands.forEach { brand ->
+                BrandSearchComponent(navController, brand)
+            }
         }
         Spacer(
             modifier = Modifier

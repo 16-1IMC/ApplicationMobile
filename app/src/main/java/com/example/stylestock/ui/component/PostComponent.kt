@@ -45,7 +45,7 @@ fun PostComponent(navController: NavController, post: Post) {
             modifier = Modifier
                 .size(345.dp),
             contentScale = ContentScale.FillBounds,
-            model = post.images[0].path,
+            model = if (post.images.isNotEmpty()) post.images[0].path else "",
             contentDescription = "background"
         )
         Column(
@@ -60,6 +60,94 @@ fun PostComponent(navController: NavController, post: Post) {
                 horizontalArrangement = Arrangement.End
             ) {
                 LogoBrand(navController, post.brand, 36.dp)
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.Bottom,
+                horizontalArrangement = Arrangement.SpaceBetween,
+            ) {
+                val textStyleBody = androidx.compose.ui.text.TextStyle(
+                    color = Color.White,
+                    fontSize = 30.sp,
+                    fontFamily = Jura,
+                    fontWeight = FontWeight.Bold,
+                )
+                var textStyle by remember { mutableStateOf(textStyleBody) }
+                var readyToDraw by remember { mutableStateOf(false) }
+                Text(
+                    text = post.title,
+                    style = textStyle,
+                    softWrap = true,
+                    modifier = Modifier
+                        .height(80.dp)
+                        .width(170.dp)
+                        .drawWithContent {
+                            if (readyToDraw) drawContent()
+                        },
+                    onTextLayout = { textLayoutResult ->
+                        if (textLayoutResult.didOverflowHeight) {
+                            textStyle = textStyle.copy(fontSize = textStyle.fontSize * 0.9)
+                        } else {
+                            readyToDraw = true
+                        }
+                    }
+                )
+                Button(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(40)),
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = NeonGreen,
+                        contentColor = Color.White
+                    ),
+                    onClick = {navController.navigate("post/${post.id}") }) {
+                    Text(
+                        textAlign = TextAlign.Center,
+                        text = "View Post",
+                        color = Jet,
+                        fontSize = 16.sp,
+                        fontFamily = K2D,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun LightPostComponent(navController: NavController, post: Post) {
+
+    Spacer(
+        modifier = Modifier
+            .height(15.dp)
+
+    )
+    Box(
+        modifier = Modifier
+            .height(233.dp)
+            .width(345.dp)
+            .clip(shape = RoundedCornerShape(28.dp))
+            .background(NeonBlue)
+    ) {
+        AsyncImage(
+            modifier = Modifier
+                .size(345.dp),
+            contentScale = ContentScale.FillBounds,
+            model = if (post.images.isNotEmpty()) post.images[0].path else "",
+            contentDescription = "background"
+        )
+        Column(
+            modifier = Modifier
+                .padding(20.dp)
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.End
+            ) {
             }
             Row(
                 modifier = Modifier

@@ -15,7 +15,6 @@ var Adidas = Brand(
         "30/06/2023"
     ),
     "adidas@gmail.com",
-    "adidas123",
     listOf(
         SocialNetwork(
             1,
@@ -52,6 +51,7 @@ var Adidas = Brand(
     ),
     emptyList(),
     "30/08/1596",
+    "active",
 )
 
 var AdidasPost = Post(

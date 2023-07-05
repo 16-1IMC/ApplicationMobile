@@ -58,6 +58,7 @@ import com.example.stylestock.ui.theme.Jet
 import com.example.stylestock.ui.theme.Jura
 import com.example.stylestock.ui.theme.K2D
 import com.example.stylestock.ui.theme.NeonBlue
+import com.example.stylestock.ui.theme.NeonGreen
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
@@ -67,7 +68,7 @@ import kotlinx.coroutines.runBlocking
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(navController: NavController) {
+fun LoginBrandScreen(navController: NavController) {
 
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -94,7 +95,7 @@ fun LoginScreen(navController: NavController) {
                 .fillMaxWidth(),
         ) {
             Text(
-                text = "Login",
+                text = "Login Brand",
                 color = Jet,
                 fontSize = 30.sp,
                 fontFamily = Jura,
@@ -104,7 +105,7 @@ fun LoginScreen(navController: NavController) {
                     .height(45.dp)
                     .drawBehind {
                         drawLine(
-                            color = NeonBlue,
+                            color = NeonGreen,
                             start = Offset(0f, size.height),
                             end = Offset(size.width, size.height),
                             strokeWidth = 12f,
@@ -137,11 +138,11 @@ fun LoginScreen(navController: NavController) {
                     label = { Text(text = "Email address") },
                     placeholder = { Text(text = "Enter your e-mail") },
                     colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = NeonBlue,
+                        focusedBorderColor = NeonGreen,
                         unfocusedBorderColor = Color.Black,
-                        focusedLabelColor = NeonBlue,
+                        focusedLabelColor = NeonGreen,
                         unfocusedLabelColor = Color.Black,
-                        cursorColor = NeonBlue,
+                        cursorColor = NeonGreen,
                     ),
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Email
@@ -175,11 +176,11 @@ fun LoginScreen(navController: NavController) {
                     label = { Text(text = "Password") },
                     placeholder = { Text(text = "Enter your password") },
                     colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = NeonBlue,
+                        focusedBorderColor = NeonGreen,
                         unfocusedBorderColor = Color.Black,
-                        focusedLabelColor = NeonBlue,
+                        focusedLabelColor = NeonGreen,
                         unfocusedLabelColor = Color.Black,
-                        cursorColor = NeonBlue,
+                        cursorColor = NeonGreen,
                     ),
                     visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                     trailingIcon = {
@@ -211,7 +212,7 @@ fun LoginScreen(navController: NavController) {
                         .clip(RoundedCornerShape(50))
                         .width(250.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = NeonBlue,
+                        containerColor = NeonGreen,
                         contentColor = Color.White
                     ),
                     onClick = {
@@ -234,7 +235,7 @@ fun LoginScreen(navController: NavController) {
                                         UserStore(context).saveToken(
                                             token.token,
                                             user[0].id.toString(),
-                                            false
+                                            true
                                         )
                                         navController.navigate("follow")
                                     } else {
@@ -275,7 +276,7 @@ fun LoginScreen(navController: NavController) {
                         text = AnnotatedString("Register now"),
                         onClick = { navController.navigate("register") },
                         style = TextStyle(
-                            color = NeonBlue,
+                            color = NeonGreen,
                             fontSize = 16.sp,
                             fontFamily = K2D,
                             fontWeight = FontWeight.Normal,

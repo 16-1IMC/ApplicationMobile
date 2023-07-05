@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.stylestock.modele.ApiKey
 import com.example.stylestock.repository.ApiRepository
+import com.example.stylestock.repository.BrandRepository
 import com.example.stylestock.repository.UserRepository
 import com.example.stylestock.repository.UserStore
 import com.google.gson.Gson
@@ -21,9 +22,15 @@ fun NavigationGraph(navController: NavHostController) {
     var start = "login"
     if (apiKey != "") {
         Log.d("styleStock", apiKey)
-        val user = runBlocking { UserRepository(apiKey).getUserById(UserStore(context).getUserId.first()) }
+        val user = runBlocking {
+            if (UserStore(context).getIsBrand.first()) {
+                BrandRepository(apiKey).getBrandById(UserStore(context).getUserId.first())
+            } else {
+                UserRepository(apiKey).getUserById(UserStore(context).getUserId.first())
+            }
+
+        }
         if (user != "") {
-            Log.d("styleStock", "test")
             start = "follow"
         }
     }
@@ -38,7 +45,7 @@ fun NavigationGraph(navController: NavHostController) {
         composable("searchPost") { SearchPostScreen(navController) }
         composable("login") { LoginScreen(navController) }
         composable("register") { RegisterScreen(navController) }
-        composable("create") { CreatePostScreen(navController) }
+        composable("addPost") { CreatePostScreen(navController) }
         composable("brand/{brandId}") { backStackEntry ->
             BrandScreen(
                 navController,
