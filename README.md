@@ -29,6 +29,10 @@ git clone https://github.com/16-1IMC/ApplicationMobile.git
 
 3. Build and run the application on an Android emulator or a physical device.
 
+OR
+
+Install the APK on your device [APK](styleStock.apk)
+
 ## Dependencies
 
 The following dependencies are used in the StyleStock application:
