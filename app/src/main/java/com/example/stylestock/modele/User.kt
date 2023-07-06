@@ -4,8 +4,8 @@ data class User(
     val id: Int,
     val email: String,
     val creationDate: String,
-    val likes: List<Post>,
-    val follows: List<Brand>,
+    val likes: List<Post> = emptyList(),
+    val follows: List<Brand> = emptyList(),
 )
 
 data class UserALl(

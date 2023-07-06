@@ -3,10 +3,7 @@ package com.example.stylestock.ui.component
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -36,7 +33,7 @@ fun LogoBrand(navController: NavController, brand: Brand,size: Dp){
             modifier = Modifier
                 .background(Color.White)
                 .size(size),
-            model = brand.logo.path,
+            model = brand.profilePicture.toString(),
             contentDescription = "logo"
         )
     }

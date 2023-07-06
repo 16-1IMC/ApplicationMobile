@@ -1,5 +1,6 @@
 package com.example.stylestock.ui.component
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -54,10 +55,10 @@ fun BrandComponent(navController: NavController, brand: Brand) {
 
     ) {
         AsyncImage(
-            model = brand.banner.path,
+            model = brand.banner.toString(),
             modifier = Modifier
                 .fillMaxSize(),
-            contentScale = ContentScale.FillHeight,
+            contentScale = ContentScale.Inside,
             contentDescription = "banner"
         )
         Box(

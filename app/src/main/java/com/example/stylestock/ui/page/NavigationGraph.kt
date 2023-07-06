@@ -42,5 +42,7 @@ fun NavigationGraph(navController: NavHostController, start: String="login") {
                 backStackEntry.arguments?.getString("postId")
             )
         }
+        composable("registerBrand") { RegisterBrandScreen(navController) }
+        composable("loginBrand"){ LoginBrandScreen(navController) }
     }
 }

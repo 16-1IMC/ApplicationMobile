@@ -49,7 +49,7 @@ fun BrandSearchComponent(navController: NavController, brand: Brand) {
             .clickable { navController.navigate("brand/${brand.id}") },
     ) {
         AsyncImage(
-            model = brand.banner.path,
+            model = brand.banner.toString(),
             modifier = Modifier
                 .fillMaxSize(),
             contentScale = ContentScale.FillWidth,
@@ -88,7 +88,7 @@ fun BrandSearchComponent(navController: NavController, brand: Brand) {
                 style = textStyle,
                 softWrap = true,
                 modifier = Modifier
-                    .width(130.dp)
+                    .width(200.dp)
                     .drawWithContent {
                         if (readyToDraw) drawContent()
                     },

@@ -1,5 +1,6 @@
 package com.example.stylestock.ui.component
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -45,7 +46,7 @@ fun PostComponent(navController: NavController, post: Post) {
             modifier = Modifier
                 .size(345.dp),
             contentScale = ContentScale.FillBounds,
-            model = if (post.images.isNotEmpty()) post.images[0].path else "",
+            model = if (post.images.isNotEmpty()) post.images[0].toString() else "",
             contentDescription = "background"
         )
         Column(
@@ -117,7 +118,7 @@ fun PostComponent(navController: NavController, post: Post) {
 
 @Composable
 fun LightPostComponent(navController: NavController, post: Post) {
-
+    Log.d("styleStock", "LightPostComponent: ${post.images[0].toString()}")
     Spacer(
         modifier = Modifier
             .height(15.dp)
@@ -134,7 +135,7 @@ fun LightPostComponent(navController: NavController, post: Post) {
             modifier = Modifier
                 .size(345.dp),
             contentScale = ContentScale.FillBounds,
-            model = if (post.images.isNotEmpty()) post.images[0].path else "",
+            model = if (post.images.isNotEmpty()) post.images[0].toString() else "",
             contentDescription = "background"
         )
         Column(

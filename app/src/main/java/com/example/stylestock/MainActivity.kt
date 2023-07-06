@@ -39,19 +39,26 @@ class MainActivity : ComponentActivity() {
         setContent {
             val context = LocalContext.current
             val apiKey = runBlocking { UserStore(context).getAccessToken.first() }
+            val isBrand = runBlocking { UserStore(context).getIsBrand.first() }
             var start = "login"
             if (apiKey != "") {
                 Log.d("styleStock", apiKey)
                 val user = runBlocking {
-                    if (UserStore(context).getIsBrand.first()) {
-                        BrandRepository(apiKey).getBrandById(UserStore(context).getUserId.first())
-                    } else {
-                        UserRepository(apiKey).getUserById(UserStore(context).getUserId.first())
-                    }
+
+                        if (UserStore(context).getIsBrand.first()) {
+                            BrandRepository(apiKey).getBrandById(UserStore(context).getUserId.first())
+                        } else {
+                            UserRepository(apiKey).getUserById(UserStore(context).getUserId.first())
+                        }
 
                 }
-                if (user != "") {
-                    start = "follow"
+                Log.d("styleStock", user.toString())
+                if (user != "" && user != null) {
+                    if(isBrand) {
+                        start = "profil"
+                    }else{
+                        start = "follow"
+                    }
                 } else {
                     start = "login"
                 }
@@ -62,6 +69,7 @@ class MainActivity : ComponentActivity() {
             showBottomBar = when (navBackStackEntry?.destination?.route) {
                 "login" -> false // on this screen bottom bar should be hidden
                 "register" -> false
+                "registerBrand" -> false
                 else -> true // in all other cases show bottom bar
             }
             Scaffold(

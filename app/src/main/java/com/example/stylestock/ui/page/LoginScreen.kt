@@ -230,13 +230,16 @@ fun LoginScreen(navController: NavController) {
                                         UserRepository(token.token).getUserByEmail(textLogin.text)
                                     if (resUser != "") {
                                         Log.d("styleStock", resUser)
-                                        val user = Gson().fromJson(resUser, Array<UserALl>::class.java)
-                                        UserStore(context).saveToken(
-                                            token.token,
-                                            user[0].id.toString(),
-                                            false
-                                        )
-                                        navController.navigate("follow")
+                                        val user =
+                                            Gson().fromJson(resUser, Array<UserALl>::class.java)
+                                        if (user.isNotEmpty()) {
+                                            UserStore(context).saveToken(
+                                                token.token,
+                                                user[0].id.toString(),
+                                                false
+                                            )
+                                            navController.navigate("follow")
+                                        }
                                     } else {
                                         Toast.makeText(
                                             context,
@@ -274,6 +277,26 @@ fun LoginScreen(navController: NavController) {
                     ClickableText(
                         text = AnnotatedString("Register now"),
                         onClick = { navController.navigate("register") },
+                        style = TextStyle(
+                            color = NeonBlue,
+                            fontSize = 16.sp,
+                            fontFamily = K2D,
+                            fontWeight = FontWeight.Normal,
+                        )
+                    )
+
+                }
+                Row() {
+                    Text(
+                        text = "Brand ? ",
+                        color = Jet,
+                        fontSize = 16.sp,
+                        fontFamily = K2D,
+                        fontWeight = FontWeight.Normal
+                    )
+                    ClickableText(
+                        text = AnnotatedString("Login here"),
+                        onClick = { navController.navigate("loginBrand") },
                         style = TextStyle(
                             color = NeonBlue,
                             fontSize = 16.sp,

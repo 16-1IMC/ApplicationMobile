@@ -25,9 +25,6 @@ fun TrendScreen(navController: NavController) {
         Column(modifier = Modifier
             .padding(start = 33.dp)
             .verticalScroll(rememberScrollState())) {
-            for (i in 0..10){
-                PostComponent(navController, AdidasPost)
-            }
             Spacer(modifier = Modifier
                 .height(70.dp))
         }

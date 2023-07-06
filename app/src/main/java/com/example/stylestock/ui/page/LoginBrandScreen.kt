@@ -10,8 +10,6 @@ import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
@@ -33,7 +31,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
@@ -42,27 +39,24 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.stylestock.R
 import com.example.stylestock.modele.ApiKey
+import com.example.stylestock.modele.Brand
+import com.example.stylestock.modele.BrandAll
 import com.example.stylestock.modele.User
 import com.example.stylestock.repository.ApiRepository
-import com.example.stylestock.repository.UserRepository
+import com.example.stylestock.repository.BrandRepository
 import com.example.stylestock.repository.UserStore
-import com.example.stylestock.ui.component.TitleComponent
 import com.example.stylestock.ui.theme.Jet
 import com.example.stylestock.ui.theme.Jura
 import com.example.stylestock.ui.theme.K2D
 import com.example.stylestock.ui.theme.NeonBlue
 import com.example.stylestock.ui.theme.NeonGreen
 import com.google.gson.Gson
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
@@ -226,17 +220,21 @@ fun LoginBrandScreen(navController: NavController) {
                                     val token = Gson().fromJson(
                                         resToken, ApiKey::class.java
                                     )
-                                    val resUser =
-                                        UserRepository(token.token).getUserByEmail(textLogin.text)
-                                    if (resUser != "") {
-                                        Log.d("styleStock", resUser)
-                                        val user = Gson().fromJson(resUser, Array<User>::class.java)
+                                    val resBrand =
+                                        BrandRepository(token.token).getBrandByEmail(textLogin.text)
+                                    if (resBrand != "") {
+                                        Log.d("styleStock", resBrand)
+                                        val user = Gson().fromJson(resBrand, Array<BrandAll>::class.java)
                                         UserStore(context).saveToken(
                                             token.token,
                                             user[0].id.toString(),
                                             true
                                         )
-                                        navController.navigate("follow")
+                                        navController.navigate(
+                                            "brand/${
+                                                user[0].id
+                                            }"
+                                        )
                                     } else {
                                         Toast.makeText(
                                             context,
@@ -276,6 +274,26 @@ fun LoginBrandScreen(navController: NavController) {
                         onClick = { navController.navigate("register") },
                         style = TextStyle(
                             color = NeonGreen,
+                            fontSize = 16.sp,
+                            fontFamily = K2D,
+                            fontWeight = FontWeight.Normal,
+                        )
+                    )
+
+                }
+                Row() {
+                    Text(
+                        text = "User ? ",
+                        color = Jet,
+                        fontSize = 16.sp,
+                        fontFamily = K2D,
+                        fontWeight = FontWeight.Normal
+                    )
+                    ClickableText(
+                        text = AnnotatedString("Login here"),
+                        onClick = { navController.navigate("login") },
+                        style = TextStyle(
+                            color = NeonBlue,
                             fontSize = 16.sp,
                             fontFamily = K2D,
                             fontWeight = FontWeight.Normal,

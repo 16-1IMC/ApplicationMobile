@@ -26,7 +26,7 @@ class LikeRepository(apiKey: String = "") {
         return withContext(Dispatchers.IO) {
             var result: String? = null
             try {
-                val url = URL(BaseUrl + """/likes?user=${userId}&brand=${postId}""")
+                val url = URL(BaseUrl + """/likes?user_id=${userId}&post_id=${postId}""")
                 val request = Request.Builder()
                     .headers(headers)
                     .get()
@@ -34,7 +34,6 @@ class LikeRepository(apiKey: String = "") {
                     .build()
                 val response = client.newCall(request).execute()
                 result = response.body?.string() ?: ""
-                Log.d("styleStock", "user : $userId, brand : $postId, result : $result")
                 var like = Gson().fromJson(result, Array<LikeAll>::class.java)
                 if (like.isNotEmpty()) {
                     return@withContext like[0]
@@ -53,9 +52,9 @@ class LikeRepository(apiKey: String = "") {
         Log.d("styleStock", "addLike")
         val json = """
             {
-                "postId": "/api/brands/$postId",
+                "postId": "/api/posts/$postId",
                 "userId": "/api/users/$userId",
-                "created_at": "2021-04-20T14:00:00+00:00"
+                "createdAt": "2021-04-20T14:00:00+00:00"
             }
         """.trimIndent()
         val body = json.toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull())
@@ -97,7 +96,7 @@ class LikeRepository(apiKey: String = "") {
             var result: String? = null
             try {
                 var like = getLike(userId, postId)
-                val url = URL(BaseUrl + "/likes/${like?.id}")
+                val url = URL(BaseUrl + "/likes?postId=${postId}&userId=${userId}\"")
                 val request = Request.Builder()
                     .headers(headers)
                     .delete()

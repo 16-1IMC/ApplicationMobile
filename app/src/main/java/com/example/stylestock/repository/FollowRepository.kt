@@ -119,4 +119,34 @@ class FollowRepository(apiKey: String = ""){
 
     }
 
+    suspend fun getFollowUser(userId: String): List<String>?{
+        Log.d("styleStock", "getFollowUser")
+        val headers = Headers.Builder()
+            .add("Accept", "application/json")
+            .add("Authorization", """Bearer ${this.apiKey}""")
+            .build()
+        return withContext(Dispatchers.IO) {
+            var result: String? = null
+            try {
+                val url = URL(BaseUrl + """/follows?user=${userId}""")
+                val request = Request.Builder()
+                    .headers(headers)
+                    .get()
+                    .url(url)
+                    .build()
+                val response = client.newCall(request).execute()
+                result = response.body?.string() ?: ""
+                var follow =Gson().fromJson(result, Array<FollowAll>::class.java)
+                if (follow.isNotEmpty()) {
+                    return@withContext follow.map { it.brand.replace("/index.php/api/brands/", "") }
+                } else {
+                    Log.d("styleStock", "Err : $result")
+                    return@withContext null
+                }
+            } catch (err: Error) {
+                Log.d("styleStock", err.toString())
+                return@withContext null
+            }
+        }
+    }
 }

@@ -2,6 +2,8 @@ package com.example.stylestock.repository
 
 import android.net.Uri
 import android.util.Log
+import com.example.stylestock.modele.Image
+import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.Headers
@@ -21,7 +23,7 @@ class ImageRepository(apiKey: String = "") {
     val BaseUrl = "http://thegoodnetwork.fr/index.php/api"
     var client: OkHttpClient = OkHttpClient()
 
-    suspend fun createImage(file: File): String {
+    suspend fun createImage(file: File): Image? {
         Log.d("styleStock", "createImage")
         val builder = MultipartBody.Builder()
             .setType(MultipartBody.FORM)
@@ -41,16 +43,17 @@ class ImageRepository(apiKey: String = "") {
                     .build()
                 val response = client.newCall(request).execute()
                 result = response.body?.string() ?: ""
-                if (response.isSuccessful) {
-                    return@withContext result
+                var image = Gson().fromJson(result, Image::class.java)
+                if (image != null) {
+                    Log.d("styleStock", image.id.toString() + " : " +result)
+                    return@withContext image
                 } else {
                     Log.d("styleStock", result)
-                    Log.d("styleStock", result)
-                    return@withContext ""
+                    return@withContext null
                 }
             } catch (err: Error) {
                 Log.d("styleStock", err.toString())
-                return@withContext ""
+                return@withContext null
             }
         }
     }

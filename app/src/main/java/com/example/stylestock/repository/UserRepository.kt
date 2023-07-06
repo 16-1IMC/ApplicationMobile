@@ -96,7 +96,7 @@ class UserRepository(apiKey: String = "") {
         return withContext(Dispatchers.IO) {
             var result: String? = null
             try {
-                val url = URL(BaseUrl + "/users/register")
+                val url = URL("$BaseUrl/users/register")
                 val request = Request.Builder()
                     .headers(headers)
                     .post(body)

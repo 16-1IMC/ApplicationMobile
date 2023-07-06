@@ -328,7 +328,7 @@ fun RegisterScreen(navController: NavController) {
                     ClickableText(
                         text = AnnotatedString("Contact us"),
                         onClick = {
-
+                            navController.navigate("registerBrand")
 
                         },
                         style = androidx.compose.ui.text.TextStyle(
